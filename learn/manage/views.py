@@ -1,10 +1,10 @@
-from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import user_passes_test
+
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView, View
 
 from learn.forms import CreateSubjectForm, EditCourseForm
@@ -14,6 +14,8 @@ __author__ = 'FRAMGIA\nguyen.huy.quyet'
 
 
 # Account
+requirement_admin = user_passes_test(lambda u: u.is_staff, login_url='learn:login')
+
 
 @user_passes_test(lambda u: u.is_staff, login_url='learn:login')
 def index_manage(request):
@@ -29,7 +31,7 @@ class ProfileManageView(ListView):
     template_name = 'manage/account/profile_user.html'
     # context_object_name = 'list_user_profile'
 
-    @method_decorator(user_passes_test)
+    @method_decorator(requirement_admin)
     def dispatch(self, request, *args, **kwargs):
         return super(ProfileManageView, self).dispatch(request, *args, **kwargs)
 
@@ -37,6 +39,7 @@ class ProfileManageView(ListView):
         return self.model.objects.filter(is_staff=True)
 
     def get_context_data(self, **kwargs):
+        # search = ''
         search = self.request.GET.get('search', '')
         context = super(ProfileManageView, self).get_context_data(**kwargs)
         if search != '':
@@ -52,7 +55,7 @@ class ProfileUserView(ListView):
     template_name = 'manage/account/profile_user.html'
     # context_object_name = 'list_user_profile'
 
-    @method_decorator(user_passes_test)
+    @method_decorator(requirement_admin)
     def dispatch(self, request, *args, **kwargs):
         return super(ProfileUserView, self).dispatch(request, *args, **kwargs)
 
@@ -60,6 +63,7 @@ class ProfileUserView(ListView):
         return self.model.objects.filter(is_staff=False)
 
     def get_context_data(self, **kwargs):
+        # search = ''
         search = self.request.GET.get('search', '')
         context = super(ProfileUserView, self).get_context_data(**kwargs)
         if search != '':
@@ -75,7 +79,7 @@ class DetailProfileView(DetailView):
     template_name = 'manage/account/detail_profile.html'
     context_object_name = 'profile_user'
 
-    @method_decorator(user_passes_test)
+    @method_decorator(requirement_admin)
     def dispatch(self, request, *args, **kwargs):
         return super(DetailProfileView, self).dispatch(request, *args, **kwargs)
 
@@ -85,7 +89,7 @@ class EditProfileView(UpdateView):
     template_name = 'manage/account/edit_profile.html'
     fields = ['first_name', 'last_name', 'email', 'is_staff']
 
-    @method_decorator(user_passes_test)
+    @method_decorator(requirement_admin)
     def dispatch(self, request, *args, **kwargs):
         return super(EditProfileView, self).dispatch(request, *args, **kwargs)
 
@@ -99,7 +103,7 @@ class DeleteUserView(DeleteView):
     context_object_name = 'del_user'
     success_url = reverse_lazy('learn:index_profile')
 
-    @method_decorator(user_passes_test)
+    @method_decorator(requirement_admin)
     def dispatch(self, request, *args, **kwargs):
         return super(DeleteUserView, self).dispatch(request, *args, **kwargs)
 
@@ -135,13 +139,17 @@ class ListCourseView(ListView):
     template_name = 'manage/course/index_course.html'
     context_object_name = 'list_course'
 
+    @method_decorator(requirement_admin)
+    def dispatch(self, request, *args, **kwargs):
+        return super(ListCourseView, self).dispatch(request, *args, **kwargs)
+
 
 class DetailCourseView(DetailView):
     model = Course
     template_name = 'manage/course/detail_course.html'
     context_object_name = 'detail_course'
 
-    @method_decorator(user_passes_test)
+    @method_decorator(requirement_admin)
     def dispatch(self, request, *args, **kwargs):
         return super(DetailCourseView, self).dispatch(request, *args, **kwargs)
 
@@ -162,7 +170,7 @@ class EditCourseView(UpdateView):
     form_class = EditCourseForm
     context_object_name = 'course'
 
-    @method_decorator(user_passes_test)
+    @method_decorator(requirement_admin)
     def dispatch(self, request, *args, **kwargs):
         return super(EditCourseView, self).dispatch(request, *args, **kwargs)
 
@@ -186,7 +194,7 @@ class DeleteCourseView(DeleteView):
     success_url = reverse_lazy('learn:list_course')
 
 
-@user_passes_test(lambda u: u.is_staff, login_url='learn:login')
+@requirement_admin
 def delete_user_course(request):
     user_id = request.POST.get('user_id')
     course_id = request.POST.get('course_id')
@@ -202,7 +210,7 @@ def delete_user_course(request):
     return HttpResponseRedirect(reverse('learn:detail_course', kwargs={'pk': course_id}))
 
 
-@user_passes_test(lambda u: u.is_staff, login_url='learn:login')
+@requirement_admin
 def add_user_course(request):
     if request.method == 'POST':
         user_id = request.POST.get('user_id')
@@ -220,7 +228,7 @@ class AddUserCourseView(DetailView):
     template_name = 'manage/course/add_user.html'
     context_object_name = 'detail_course'
 
-    @method_decorator(user_passes_test)
+    @method_decorator(requirement_admin)
     def dispatch(self, request, *args, **kwargs):
         return super(AddUserCourseView, self).dispatch(request, *args, **kwargs)
 
@@ -243,7 +251,7 @@ class CreateSubjectView(CreateView):
     template_name = 'manage/subject/create_subject.html'
     # fields = ['name', 'description', 'begin_at', 'end_at', 'status']
 
-    @method_decorator(login_required)
+    @method_decorator(requirement_admin)
     def dispatch(self, request, *args, **kwargs):
         return super(CreateSubjectView, self).dispatch(request, *args, **kwargs)
 
@@ -273,6 +281,10 @@ class ListSubjectView(ListView):
     # context_object_name = 'list_subject'
     cou_id = ''
 
+    @method_decorator(requirement_admin)
+    def dispatch(self, request, *args, **kwargs):
+        return super(ListSubjectView, self).dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         cou_id = self.request.GET.get('course_id')
         sub_name = self.request.GET.get('name_sub')
@@ -298,7 +310,7 @@ class DetailSubjectView(DetailView):
     template_name = 'manage/subject/detail_subject.html'
     context_object_name = 'detail_subject'
 
-    @method_decorator(login_required)
+    @method_decorator(requirement_admin)
     def dispatch(self, request, *args, **kwargs):
         request.session['id_detail_subject'] = self.kwargs['pk']
         return super(DetailSubjectView, self).dispatch(request, *args, **kwargs)
@@ -320,7 +332,7 @@ class EditSubjectView(UpdateView):
     form_class = CreateSubjectForm
     # fields = ['name', 'description', 'created_at', 'updated_at', 'begin_at', 'end_at', 'status']
 
-    @method_decorator(login_required)
+    @method_decorator(requirement_admin)
     def dispatch(self, request, *args, **kwargs):
         return super(EditSubjectView, self).dispatch(request, *args, **kwargs)
 
@@ -341,6 +353,7 @@ class EditSubjectView(UpdateView):
         return super(EditSubjectView, self).form_valid(form)
 
 
+@requirement_admin
 def delete_subject(request):
     sub_id = request.POST.get('subject_id')
     sub = get_object_or_404(Subject, pk=sub_id)
@@ -359,6 +372,7 @@ def delete_subject(request):
     return HttpResponseRedirect(reverse('learn:list_subject'))
 
 
+@requirement_admin
 def delete_user_subject(request):
     user_id = request.POST.get('user_id')
     subject_id = request.POST.get('subject_id')
@@ -390,6 +404,7 @@ def delete_user_subject(request):
     return HttpResponseRedirect(reverse('learn:list_subject'))
 
 
+@requirement_admin
 def add_user_subject(request):
     if request.method == 'POST':
         user_id = request.POST.get('user_id')
@@ -408,7 +423,7 @@ class AddUserSubjectView(DetailView):
     template_name = 'manage/subject/add_user.html'
     context_object_name = 'detail_subject'
 
-    @method_decorator(login_required)
+    @method_decorator(requirement_admin)
     def dispatch(self, request, *args, **kwargs):
         return super(AddUserSubjectView, self).dispatch(request, *args, **kwargs)
 
@@ -435,7 +450,7 @@ class ListTaskView(ListView):
     template_name = 'manage/task/index_task.html'
     # context_object_name = 'list_task'
 
-    @method_decorator(login_required)
+    @method_decorator(requirement_admin)
     def dispatch(self, request, *args, **kwargs):
         return super(ListTaskView, self).dispatch(request, *args, **kwargs)
 
@@ -454,7 +469,7 @@ class CreateTaskView(CreateView):
     template_name = 'manage/task/create_task.html'
     fields = ['name', 'subject_id', 'content', 'begin_at', 'end_at']
 
-    @method_decorator(login_required)
+    @method_decorator(requirement_admin)
     def dispatch(self, request, *args, **kwargs):
         return super(CreateTaskView, self).dispatch(request, *args, **kwargs)
 
@@ -467,7 +482,7 @@ class DetailTaskView(DetailView):
     template_name = 'manage/task/detail_task.html'
     context_object_name = 'detail_task'
 
-    @method_decorator(login_required)
+    @method_decorator(requirement_admin)
     def dispatch(self, request, *args, **kwargs):
         request.session['id_detail_task'] = self.kwargs['pk']
         return super(DetailTaskView, self).dispatch(request, *args, **kwargs)
@@ -488,7 +503,7 @@ class EditTaskView(UpdateView):
     fields = ['name', 'subject_id', 'content', 'begin_at', 'end_at']
     context_object_name = 'edit_task'
 
-    @method_decorator(login_required)
+    @method_decorator(requirement_admin)
     def dispatch(self, request, *args, **kwargs):
         return super(EditTaskView, self).dispatch(request, *args, **kwargs)
 
@@ -496,6 +511,7 @@ class EditTaskView(UpdateView):
         return reverse_lazy('learn:detail_task', kwargs={'pk': self.request.session['id_detail_task']})
 
 
+@requirement_admin
 def delete_task(request):
     task_id = request.POST.get('task_id')
     check = UserTask.objects.filter(task_id=task_id, status=True).exists()
@@ -508,6 +524,7 @@ def delete_task(request):
         return HttpResponseRedirect(reverse_lazy('learn:list_task'))
 
 
+@requirement_admin
 def delete_user_task(request):
     user_id = request.POST.get('user_id')
     task_id = request.POST.get('task_id')
@@ -516,6 +533,7 @@ def delete_user_task(request):
     return HttpResponseRedirect(reverse('learn:detail_task', kwargs={'pk': task_id}))
 
 
+@requirement_admin
 def add_user_task(request):
     if request.method == 'POST':
         user_id = request.POST.get('user_id')
@@ -530,13 +548,14 @@ def add_user_task(request):
     return HttpResponseRedirect(reverse('learn:add_user_task_view', kwargs={'pk': task_id}))
 
 
+@requirement_admin
 class AddUserTaskView(DetailView):
     model = Task
     template_name = 'manage/task/add_user.html'
     context_object_name = 'detail_task'
 
     # @method_decorator(login_required)
-    @permission_required('is_staff')
+    @method_decorator(requirement_admin)
     def dispatch(self, request, *args, **kwargs):
         return super(AddUserTaskView, self).dispatch(request, *args, **kwargs)
 
