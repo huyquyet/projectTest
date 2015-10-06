@@ -1,0 +1,18 @@
+{% extends 'manage/index_manage.html' %}
+{% block title %}
+Trang quan ly tai khoan
+{% endblock %}
+{% block content %}
+<div class="col-sm-12" style="margin: 0 0 5px 0">
+    <legend><span>Edit Profile</span></legend>
+    <form action="{% url 'learn:edit_profile' user.id %}" method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+
+        <button type="submit" class="btn btn-default" value="Send">Send</button>
+        <button type="reset" class="btn btn-default" value="Reset">Reset</button>
+        <a href="{% url 'learn:set_pass' user.id%}" role="button" class="btn btn-default" value="">Set Password</a>
+        <a href="javascript:history.go(-1) " role="button" class="btn btn-danger">Back</a>
+    </form>
+</div>
+{% endblock %}

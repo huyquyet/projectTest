@@ -1,0 +1,49 @@
+{% extends 'manage/index_manage.html' %}
+{% block title %}
+    List Task
+{% endblock %}
+
+{% block content %}
+    <div class="col-sm-12">
+        <legend>
+            <div class="form-group form-inline" role="form">
+                <span>List Task</span>
+            <span class="" style="float: right">
+                    <form action="{% url 'learn:list_task' %}" method="get" role="form"
+                          class="form-inline">
+                        <div class="form-group">
+                            {% csrf_token %}
+                            <input type="text" name="search" value="" class="form-control input-sm"
+                                   placeholder="Search">
+                            <button type="submit" class="btn btn-danger btn-sm">Search</button>
+                        </div>
+                    </form>
+                    </span>
+            </div>
+        </legend>
+        <legend>
+            <div class="row">
+                <div class="col-sm-1 text-info " style="border-right: 1px solid beige"><h4>ID</h4></div>
+                <div class="col-sm-3 text-info" style="border-right: 1px solid beige"><h4>Name task</h4></div>
+                <div class="col-sm-6 text-info" style="border-right: 1px solid beige"><h4>Content</h4></div>
+            </div>
+        </legend>
+        {% for obj in list_task %}
+            <div class="row" style="margin-bottom: 2px;">
+                <div class="col-sm-1">{{ obj.id }}</div>
+                <div class="col-sm-3"><a
+                        href="{% url 'learn:detail_task' obj.id %}"> {{ obj.name }}</a></div>
+                <div class="col-sm-6"> {{ obj.content }}</div>
+                <div class="col-sm-2">
+                    <a href="{% url 'learn:edit_task' obj.id %}" class="btn btn-info btn-xs" role="button" style="float: left; margin:0 5px 0 0">Edit</a>
+
+                    <form action="{% url 'learn:delete_task' %}" method="post" style="float: left">
+                        {% csrf_token %}
+                        <input class="" value="{{ obj.id }}" type="hidden" name="task_id">
+                        <button class="btn btn-danger btn-xs" role="button" type="submit" onclick="return confirm('Are you sure you want remover user ?')">Delete</button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

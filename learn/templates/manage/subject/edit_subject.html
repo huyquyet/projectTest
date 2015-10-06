@@ -1,0 +1,20 @@
+{% extends 'manage/index_manage.html' %}
+{% block title %}
+Edit Subject
+{% endblock %}
+
+{% block content %}
+<div style="margin-left: 15px;">
+
+    <form action="{% url 'learn:edit_subject' edit_subject.id%}" method="post">
+        <fieldset>
+            <legend>Edit subject</legend>
+            {% csrf_token %}
+            {{form.as_p}}
+            <button class="btn btn-default" type="submit" value="Send">Send</button>
+            <button class="btn btn-default" type="reset" value="Reset">Reset</button>
+            <a href="{% url 'learn:list_subject' %}" class="btn btn-default" role="button">Cancel</a>
+        </fieldset>
+    </form>
+</div>
+{% endblock %}

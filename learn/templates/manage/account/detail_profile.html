@@ -1,0 +1,22 @@
+{% extends 'manage/index_manage.html' %}
+{% block title %}
+Trang quan ly tai khoan
+{% endblock %}
+{% block content %}
+<div class="col-sm-12" style="margin: 0 0 5px 0">
+    <legend><span>Detail Profile</span></legend>
+    <p>Username : {{profile_user.username}}</p>
+
+    <p>First name : {{ profile_user.first_name}}</p>
+
+    <p>Last name : {{ profile_user.last_name}}</p>
+
+    <p>Email : {{ profile_user.email}}</p>
+
+    <p>Permission :
+        {% if profile_user.is_staff %}Manager{% else %}User{% endif %}</p>
+    <a href="{% url 'learn:edit_profile' profile_user.id %}" role="button" class="btn btn-default">Edit</a>
+    <a href="{% url 'learn:delete_user' profile_user.id %}" role="button" class="btn btn-default">Delete</a>
+    <a href="javascript:history.go(-1) " role="button" class="btn btn-danger">Back</a>
+</div>
+{% endblock %}

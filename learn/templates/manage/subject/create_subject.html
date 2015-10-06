@@ -1,0 +1,19 @@
+{% extends 'manage/index_manage.html' %}
+{% block title %}
+Create Subject
+{% endblock %}
+
+{% block content %}
+<div style="margin-left: 15px">
+    <form action="{% url 'learn:create_subject' %}" method="post">
+        <legend>Create new subject</legend>
+        {% csrf_token %}
+        {{form.as_p}}
+        <div style="margin: 0 0 10px 0">
+            <button class="btn btn-default" type="submit" value="Send">Send</button>
+            <button class="btn btn-default" type="reset" value="Reset">Reset</button>
+            <a href="{% url 'learn:list_subject' %}" class="btn btn-default" role="button">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

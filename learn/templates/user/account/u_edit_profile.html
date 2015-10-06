@@ -1,0 +1,11 @@
+{% extends 'user/index_user.html' %}
+{% block title %} Edit Profile{% endblock %}
+{% block content %}
+<form action="{% url 'learn:edit' user_obj.pk %}" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" value="Update"> <a href="{% url 'learn:index' %}"> <input type="button" value="Cancel"></a>
+</form>
+
+
+{% endblock %}

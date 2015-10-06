@@ -1,0 +1,12 @@
+{% extends 'base_learn.html' %}
+
+{% block content %}
+<p><label >First Name : </label>{{ profile.first_name}}</p>
+<p><label >Last Name : </label>{{ profile.last_name}}</p>
+<p><label >Email : </label>{{ profile.email}}</p>
+<p><label >Date jone : </label>{{ profile.date_joined}}</p>
+<p><label >PK : </label>{{ profile.pk}}</p>
+{% if user.pk == profile.pk %}
+<a href="{% url 'learn:edit' profile.pk %}">Thay doi </a>
+{% endif %}
+{% endblock%}

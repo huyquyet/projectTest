@@ -1,0 +1,15 @@
+{% extends 'user/index_user.html' %}
+{% block title %}
+Trang quan ly tai khoan
+{% endblock %}
+{% block content %}
+<a href="javascript:history.go(-1)">back</a><br>
+<p>Username : {{detail_profile.username}}</p>
+<p>First name : {{ detail_profile.first_name}}</p>
+<p>Last name : {{ detail_profile.last_name}}</p>
+<p>Email : {{ detail_profile.email}}</p>
+<p>Permission :
+{% if  profile_user.is_staff %}Manager{% else %}User{% endif %}</p>
+<a href="{% url 'learn:u_edit' detail_profile.id %}"><input type="button" value="Edit"></a>
+<a href="javascript:history.go(-1)">back</a>
+{% endblock %}

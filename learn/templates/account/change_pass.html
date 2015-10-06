@@ -1,0 +1,15 @@
+{% extends 'base_learn.html' %}
+
+{% block content %}
+{% if error %}
+{{ error }}
+{% else %}
+<form action="{% url 'learn:change_pass'%}" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" value="Change Password">
+    <a href="{% url 'learn:index' %}"> <input type="button" value="Cancel"></a>
+</form>
+{% endif %}
+
+{% endblock %}

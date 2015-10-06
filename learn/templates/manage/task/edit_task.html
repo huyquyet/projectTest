@@ -1,0 +1,17 @@
+{% extends 'manage/index_manage.html' %}
+{% block title %}
+Edit Task
+{% endblock %}
+
+{% block content %}
+<div style="margin:0 0 10px 15px;">
+    <form action="{% url 'learn:edit_task' edit_task.id%}" method="post">
+            <legend>Edit task</legend>
+            {% csrf_token %}
+            {{form.as_p}}
+            <button class="btn btn-info " type="submit" value="Send">Send</button>
+            <button class="btn btn-info" type="reset" value="Reset">Reset</button>
+            <a href="{% url 'learn:detail_task' edit_task.id%}" class="btn btn-danger" role="button">Cancel</a>
+    </form>
+</div>
+{% endblock%}

@@ -1,0 +1,61 @@
+{% extends 'manage/index_manage.html' %}
+{% block title %}
+    List Subject
+{% endblock %}
+
+{% block content %}
+    <div class="col-sm-12">
+        <legend>
+            <div class="form-group form-inline" role="form">
+                <span>
+                    List Subject
+                    <form action="{% url 'learn:list_subject' %}" method="GET"
+                          style="float: right; ">
+                        <input type="text" value="" name="name_sub" placeholder="Name Subject" class="form-control">
+{#                        <button class="btn btn-danger btn-sm" role="button" type="submit"  value="0">Search</button>#}
+{#                    </form>#}
+{#                </span>#}
+{#            <span style="float: right; margin-right: 20px;">#}
+{#                <form action="{% url 'learn:list_subject' %}" method="GET">#}
+                    <select class="form-control" name="course_id">
+                        <option value=""></option>
+                        {% for obj_co in list_course %}
+                            <option value="{{ obj_co.id }} ">{{ obj_co.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <button class="btn btn-danger btn-sm" role="button" type="submit" value="0">Search</button>
+                </form>
+                </span>
+            </div>
+        </legend>
+        <legend>
+            <div class="row">
+                <div class="col-sm-1 text-info " style="border-right: 1px solid beige"><h4>ID</h4></div>
+                <div class="col-sm-3 text-info" style="border-right: 1px solid beige"><h4>Name course</h4></div>
+                <div class="col-sm-6 text-info" style="border-right: 1px solid beige"><h4>Descriptions</h4></div>
+                <div class="col-sm-2 text-info">
+                    <a href="{% url 'learn:create_subject' %}" role="button" class="btn btn-default btn-sm"
+                       style="height: 30px; margin-bottom: 5px;">Create Subject</a>
+                </div>
+            </div>
+        </legend>
+        {% for obj in list_subject %}
+            <div class="row" style="margin-bottom: 2px;">
+                <div class="col-sm-1">{{ obj.id }}</div>
+                <div class="col-sm-3"><a
+                        href="{% url 'learn:detail_subject' obj.id %}"> {{ obj.name }}</a></div>
+                <div class="col-sm-6"> {{ obj.description }}</div>
+                <div class="col-sm-2">
+                    <a href="{% url 'learn:edit_subject' obj.id %}" class="btn btn-info btn-xs" role="button"
+                       style="float: left; margin: 0 5px 0 0">Edit</a>
+
+                    <form action="{% url 'learn:delete_subject' %}" method="post" style="float: left">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{ obj.id }}" name="subject_id">
+                        <button class="btn btn-danger btn-xs" type="submit" role="button">Delete</button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends 'manage/index_manage.html' %}
+{% block title %}
+    Add user
+{% endblock %}
+
+{% block content %}
+    <div class="col-sm-4">
+            <div style="margin-left: 5px;">
+                <legend>
+                    <span>Detail Subject</span>
+                <span style="float: right; margin-right: 10px;">
+                    <a href="javascript:history.go(-1)" class="btn btn-danger btn-xs" role="button">back</a>
+                    </span>
+                </legend>
+                <p>- ID : {{ detail_subject.id }}</p>
+
+                <p>- Name course : {{ detail_subject.name }} </p>
+
+                <p>- Created_at : {{ detail_subject.created_at|date:"d-m-Y" }}</p>
+
+                <p>- Updated_at : {{ detail_subject.updated_at|date:"d-m-Y" }}</p>
+
+                <p>- Begin_at : {{ detail_subject.begin_at|date:"d-m-Y" }}</p>
+
+                <p>- End_at : {{ detail_subject.end_at |date:"d-m-Y" }}</p>
+            </div>
+            <div style="margin-left: 5px;">
+                <fieldset>
+                    <legend>Description Subject</legend>
+                    <p>{{ detail_subject.description }}</p>
+                </fieldset>
+            </div>
+        </div>
+    <div class="col-sm-4">
+        <legend>
+            <span>
+                User of Course
+            </span>
+            <span style="float: right; margin-right: 20px;">
+{#                <a href="{% url 'learn:add_user_course' detail_course.id %}" role="button"#}
+{#                   class="btn btn-success btn-xs">AddUser</a>#}
+            </span>
+        </legend>
+        <table class="table table-bordered">
+            <tbody>
+            {% for obj in user_course %}
+                <tr>
+                    <td class="col-sm-2">
+                        {{ forloop.counter }}
+                    </td>
+                    <td class="col-sm-10">
+                        <strong class="text-success">username</strong> : <strong
+                            class="text-info">{{ obj.username }}</strong><br>
+                        {{ obj.first_name }} {{ obj.last_name }}
+
+                    </td>
+                    <td>
+                        <form action="{% url 'learn:remover_user_sub' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{ obj.pk }}" name="user_id">
+                            <input type="hidden" value="{{ detail_course.id }}" name="subject_id">
+                            <button type="submit" class="btn btn-danger btn-xs"
+                                    onclick="return confirm('Are you sure you want remover user ?')">Remover
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-sm-4">
+        <legend>
+            <span>
+                User not in Course
+            </span>
+        </legend>
+        <table class="table table-bordered">
+            <tbody>
+            {% for obj in users %}
+                <tr>
+                    <td class="col-sm-2">
+                        {{ forloop.counter }}
+                    </td>
+                    <td class="col-sm-10">
+                        <strong class="text-success">username</strong> : <strong
+                            class="text-info">{{ obj.username }}</strong><br>
+                        {{ obj.first_name }} {{ obj.last_name }}
+
+                    </td>
+                    <td>
+                        <form action="{% url 'learn:add_user_subject' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{ obj.pk }}" name="user_id">
+                            <input type="hidden" value="{{ detail_subject.id }}" name="subject_id">
+                            <button type="submit" class="btn btn-info btn-xs"
+                                    onclick="return confirm('Are you sure you want remover user ?')">Add
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

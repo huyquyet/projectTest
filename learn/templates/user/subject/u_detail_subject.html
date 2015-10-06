@@ -1,0 +1,127 @@
+{% extends 'user/index_user.html' %}
+{% block title %}
+Detail Subject
+{% endblock %}
+{% block content %}
+<div class="col-sm-9">
+    <div class="row">
+        <div class="col-sm-8">
+            <div style="margin-left: 5px;">
+                <legend>
+                    <span>Detail Subject</span>
+                 <span style="float: right; margin-right: 10px;">
+                     <a href="javascript:history.back()" class="btn btn-danger btn-xs" role="button">Back</a>
+                 </span>
+                <span style="float: right; margin-right: 10px;">
+                    {% if join_subject %}
+                    <span style="float: right; margin: 0 10px 0 0">
+                        <form action="{% url 'learn:u_detail_subject' detail_subject.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="hidden_join" value="{{join_subject}}">
+                            <button type="submit" class="btn btn-info btn-xs">Join</button>
+                        </form>
+                    </span>
+                    {% elif disable %}
+                    <a href="" class="btn btn-info btn-xs" role="button">Join</a>
+                    {% else %}
+                    <span style="float: right; margin: 0 10px 0 0">
+                        <form action="{% url 'learn:u_detail_subject' detail_subject.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="hidden_join" value="{{join_subject}}">
+                            <button type="submit" class="btn btn-info btn-xs">Unjoin</button>
+                        </form>
+                    </span>
+                    {% endif %}
+                </span>
+                </legend>
+                <p>- ID : {{ detail_subject.id }}</p>
+
+                <p>- Name course : {{detail_subject.name}} </p>
+
+                <p>- Created_at : {{detail_subject.created_at|date:"d-m-Y"}}</p>
+
+                <p>- Updated_at : {{detail_subject.updated_at|date:"d-m-Y"}}</p>
+
+                <p>- Begin_at : {{detail_subject.begin_at|date:"d-m-Y"}}</p>
+
+                <p>- End_at : {{detail_subject.end_at |date:"d-m-Y"}}</p>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <legend>Subject of Course</legend>
+            <div class="row">
+                <div class="col-sm-1">
+                    <strong class="text-info">ID</strong>
+                </div>
+                <div class="col-sm-6">
+                    <strong class="text-info">Name</strong>
+                </div>
+            </div>
+            {% for obj in list_course %}
+            <div class="row">
+
+                <div class="col-sm-1">
+                    {{obj.id}}
+                </div>
+                <div class="col-sm-6">
+                    {{obj.name}}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-8">
+            <div style="margin-left: 5px;">
+                <fieldset>
+                    <legend>Description Course</legend>
+                    <p>{{detail_subject.description}}</p>
+                </fieldset>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <legend>Task of Subject</legend>
+            <div class="thumbnail">
+                <div class="row">
+                    <div class="col-sm-1">
+                        <strong class="text-info">ID</strong>
+                    </div>
+                    <div class="col-sm-6">
+                        <strong class="text-info">Name</strong>
+                    </div>
+                </div>
+                {% for obj in list_task %}
+                <div class="row">
+                    <div class="col-sm-1">
+                        <a href="{% url 'learn:u_detail_task' obj.id %}" class="text-primary"> {{obj.id}}</a>
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="{% url 'learn:u_detail_task' obj.id %}" class="text-primary">{{obj.name}}</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-sm-3">
+    <legend>User of Subject</legend>
+    <table class="table table-bordered">
+        <tbody>
+        {% for obj in list_user %}
+        <tr>
+            <td class="col-sm-2">
+                {{forloop.counter}}
+            </td>
+            <td class="col-sm-10">
+                <strong class="text-success">username</strong> : <strong class="text-info">{{obj.username}}</strong><br>
+                {{obj.first_name}} {{obj.last_name}}
+            </td>
+        </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

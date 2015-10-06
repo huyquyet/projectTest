@@ -1,0 +1,10 @@
+<form action="{% url 'learn:singin' %}" method="post">
+    {% csrf_token %}
+    <p><label>Username</label> <input type="text" name="username" value=""/></p>
+
+    <p><label>Password</label> <input type="password" name="password" value=""/></p>
+    <p><input type="hidden" name="next" value="{{ request.GET.next|default:'' }}"></p>
+
+    <p><input type="submit" value="Sing in">
+        <a href="{% url 'learn:register' %} "> <input type="button" value="Register"></a></p>
+</form>

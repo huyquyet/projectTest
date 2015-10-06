@@ -1,0 +1,90 @@
+{% extends 'user/index_user.html' %}
+{% block title %}
+    Detail Task
+{% endblock %}
+{% block content %}
+    <div class="col-sm-9 ">
+        <div class="thumbnail">
+            <legend>
+                <span>Detail Task</span>
+                <span style="float: right; margin-right: 10px;">
+                    <a href="javascript:history.go(-1)" class="btn btn-danger btn-xs" role="button">back</a>
+                    <div style="float: right; margin: 0 0 0 5px">
+                        {% if joined %}
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="hidden_join" value="{{ joined_user }}">
+                                {% if joined_user == 'Join' %}
+                                    <button href="" class="btn btn-info btn-xs" type="submit"
+                                            role="button">{{ joined_user }}</button>
+                                {% elif  joined_user == 'Finish task' %}
+                                    <button href="" class="btn btn-success btn-xs" type="submit"
+                                            role="button">{{ joined_user }}</button>
+                                {% else %}
+                                    <button href="" class="btn btn-danger btn-xs" type="submit" disabled="disabled"
+                                            role="button">{{ joined_user }}</button>
+                                {% endif %}
+                            </form>
+                        {% endif %}
+                    </div>
+                </span>
+            </legend>
+            <div class="row" style="margin-left: 0px;">
+                <div class="col-sm-6">
+                    <p><span class="text-info"> ID :</span> {{ u_detail_task.id }}</p>
+
+                    <p><span class="text-info"> Name task :</span> {{ u_detail_task.name }} </p>
+
+                    <p><span class="text-info"> Created_at : </span>{{ u_detail_task.created_at|date:"d-m-Y" }}</p>
+
+                    <p><span class="text-info"> Begin_at : </span>{{ u_detail_task.begin_at|date:"d-m-Y" }}</p>
+
+                    <p><span class="text-info"> End_at :</span> {{ u_detail_task.end_at |date:"d-m-Y" }}</p>
+                </div>
+                <div class="col-sm-6">
+                    <p><span class="text-info"><strong class="text-danger">Subject</strong></p>
+
+                    <p><span class="text-info"> Name Subject : </span>{{ subject.name }} </p>
+
+                    <p><span class="text-info"> Created_at : </span>{{ subject.created_at|date:"d-m-Y" }}</p>
+
+                    <p><span class="text-info"> Begin_at : </span>{{ subject.begin_at|date:"d-m-Y" }}</p>
+
+                    <p><span class="text-info"> End_at : </span>{{ subject.end_at |date:"d-m-Y" }}</p>
+                </div>
+            </div>
+            <div>
+                <legend>
+                    <span class="text-success ">Detail Task</span>
+                </legend>
+                {% if joined_user != 'Join' %}
+                    {{ u_detail_task.content }}
+                {% else %}
+                    <span class="text-danger"> Bạn cần Join vào Task để thấy dc nôi dung của Task</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="thumbnail">
+            <legend> User of Task</legend>
+            <table class="table table-bordered">
+                <tbody>
+                {% for obj in list_user_of_task %}
+                    <tr>
+                        <td class="col-sm-2">
+                            {{ forloop.counter }}
+                        </td>
+                        <td class="col-sm-10">
+                            <strong class="text-success">username</strong> : <strong
+                                class="text-info">{{ obj.username }}</strong><br>
+                            {{ obj.first_name }} {{ obj.last_name }}
+                        </td>
+                    </tr>
+
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

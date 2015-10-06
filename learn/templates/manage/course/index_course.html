@@ -1,0 +1,31 @@
+{% extends 'manage/index_manage.html' %}
+{% block title %}
+Create new course
+{% endblock %}
+
+{% block content %}
+
+<fieldset>
+    <div class="col-sm-12">
+        <div class="row" style="border-bottom: 1px solid #8a6d3b; " >
+            <div class="col-sm-1" style="border-right: 1px solid beige">ID</div>
+            <div class="col-sm-3" style="border-right: 1px solid beige">Name course</div>
+            <div class="col-sm-5" style="border-right: 1px solid beige">Descriptions</div>
+            <div class="col-sm-2"><a href="{% url 'learn:create_course' %}" role="button" class="btn btn-default" style="height: 30px; margin-bottom: 5px;">Create New</a></div>
+        </div>
+        {% for obj in list_course %}
+        <div class="row" style="padding: 0 0 0 15px ">
+            <div class="col-sm-1" style=" margin: 0 2px 0 0;">{{ obj.id }}</div>
+            <div class="col-sm-3" style=" margin: 0 2px 0 0;"><a
+                    href="{% url 'learn:detail_course' obj.id %}"> {{obj.name}}</a></div>
+            <div class="col-sm-5" style="margin: 0 2px 5px 0;"> {{obj.description}}</div>
+            <div class="col-sm-2">
+                <a href="{% url 'learn:edit_course' obj.id %}" class="btn btn-info btn-xs" role="button" >Edit</a>
+                <a href="{% url 'learn:delete_course' obj.id %}" class="btn btn-danger btn-xs" role="button" >Delete</a>
+            </div>
+        </div>
+
+        {% endfor %}
+    </div>
+</fieldset>
+{% endblock %}

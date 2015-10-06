@@ -1,0 +1,97 @@
+{% extends 'manage/index_manage.html' %}
+{% block title %}
+    Detail Subject
+{% endblock %}
+
+{% block content %}
+    <div class="col-sm-8" thu>
+        <!--<div style="margin-left: 5px;">-->
+        <div class="thumbnail">
+            <legend>
+                <span>Detail Task</span>
+                <span style="float: right; margin-right: 10px;">
+                    <a href="javascript:history.go(-1)" class="btn btn-danger btn-xs" role="button">back</a>
+                    <a href="{% url 'learn:edit_task' detail_task.id %}" class="btn btn-info btn-xs"
+                       role="button">Edit</a>
+                    <form action="{% url 'learn:delete_task' %}" method="post" style="float: right; margin: 0 0 0 5px">
+                        {% csrf_token %}
+                        <input class="" value="{{ detail_task.id }}" type="hidden" name="task_id">
+                        <button class="btn btn-danger btn-xs" role="button" type="submit"  onclick="return confirm('Are you sure you want remover user ?')">Delete</button>
+                    </form>
+                </span>
+            </legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    <p>- ID : {{ detail_task.id }}</p>
+
+                    <p>- Name task : {{ detail_task.name }} </p>
+
+                    <p>- Created_at : {{ detail_task.created_at|date:"d-m-Y" }}</p>
+
+                    <p>- Begin_at : {{ detail_task.begin_at|date:"d-m-Y" }}</p>
+
+                    <p>- End_at : {{ detail_task.end_at |date:"d-m-Y" }}</p>
+                </div>
+                <div class="col-sm-6">
+                    <p><strong class="text-danger">Subject</strong></p>
+
+                    <p>- Name Subject : {{ subject.name }} </p>
+
+                    <p>- Created_at : {{ subject.created_at|date:"d-m-Y" }}</p>
+
+                    <p>- Begin_at : {{ subject.begin_at|date:"d-m-Y" }}</p>
+
+                    <p>- End_at : {{ subject.end_at |date:"d-m-Y" }}</p>
+                </div>
+            </div>
+            <div>
+                <legend>
+                    <span>Detail Task</span>
+
+                </legend>
+                {{ detail_task.content }}
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="thumbnail">
+            <legend>
+                <span >
+                  User of Task
+                </span>
+                <span style="float: right">
+                    <a href="{% url 'learn:add_user_task_view' detail_task.id %}" role="button" class="btn btn-success btn-xs">AddUser</a>
+                </span>
+            </legend>
+            <table class="table table-bordered">
+                <tbody>
+                {% for obj in list_user_of_task %}
+                    <tr>
+                        <td class="col-sm-2">
+                            {{ forloop.counter }}
+                        </td>
+                        <td class="col-sm-10">
+                            <strong class="text-success">username</strong> : <strong
+                                class="text-info">{{ obj.username }}</strong><br>
+                            {{ obj.first_name }} {{ obj.last_name }}
+                        </td>
+                        <td>
+                            <form action="{% url 'learn:remover_user_task' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" value="{{ obj.pk }}" name="user_id">
+                                <input type="hidden" value="{{ detail_task.id }}" name="task_id">
+                                <button type="submit" class="btn btn-danger btn-xs"
+                                        onclick="return confirm('Are you sure you want remover {{ obj.first_name }} {{ obj.last_name }} ?')">
+                                    Remover
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'user/index_user.html' %}
+{% block title %}
+Category course
+{% endblock %}
+
+{% block content %}
+
+<div class="col-sm-12">
+    <legend>
+        <div class="form-group form-inline" role="form">
+        <span>
+            <a href="{% url 'learn:my_course' %}" role="button" class="btn btn-default">My Course</a>
+        </span>
+        <span style="float: right; margin: 0 5px 0 0;">
+            <form class="form-inline" action="{% url 'learn:u_list_course' %}" method="get">
+                {% csrf_token%}
+                <input class="" type="text" name="search" placeholder="Search" value="">
+                <button class="btn btn-danger btn-sm" role="button" type="submit" value="0">Search</button>
+                <a href="javascript:history.back()" class="btn btn-danger btn-sm" role="button">Back</a>
+            </form>
+        </span>
+        </div>
+    </legend>
+    <div class="row">
+        {% for obj in list_course %}
+        <div class="col-sm-4">
+            <div class="thumbnail">
+                <!--<div class="row">-->
+                <!--<div class="col-sm-11 col-sm-offset-1  ">-->
+                <!--<div style="border: 1px red solid; width: 300px; height: 150px; margin: 0 0 3px 5px; float:  left;">-->
+                <p> ID : {{ obj.id }}</p>
+
+                <p>Name course : <a href="{% url 'learn:u_detail_course' obj.id%}"> {{obj.name}}</a></p>
+
+                <p>Des course : {{obj.description}}</p>
+
+                <p> Create at : {{obj.created_at|date:"d-m-Y"}}</p>
+
+                <p> Begin at : {{obj.begin_at|date:"d-m-Y"}}</p>
+
+                <p> Subject : {{obj.subjects.count}}</p>
+                <!--</div>-->
+                <!--&lt;!&ndash;&lt;!&ndash;</div>&ndash;&gt;&ndash;&gt;-->
+                <!--</div>-->
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

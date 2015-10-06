@@ -1,0 +1,27 @@
+{% extends 'base_learn.html' %}
+{% block nav %}
+    <ul class="nav nav-tabs nav-justified">
+       <li class=" col-sm-2 " role="presentation" >
+            <a href="{% url 'learn:index_admin' %}"> Home</a>
+        </li>
+        <li class=" col-sm-2 " role="presentation" >
+            <a href="{% url 'learn:list_course' %}"> Course</a>
+        </li>
+        <li class=" col-sm-2 " role="presentation" >
+            <a href="{% url 'learn:list_subject' %} ">Subject</a>
+        </li>
+        <li class=" col-sm-2 " role="presentation" >
+            <a href="{% url 'learn:list_task' %}"> Task</a>
+        </li>
+        <li class=" col-sm-2 " role="presentation" >
+           <a href="{% url 'learn:index_profile' %} ">Profile</a>
+        </li>
+        <li class=" col-sm-2 " role="presentation" >
+            <a href=""> Lien he</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+day la trnag index manage
+{% endblock %}

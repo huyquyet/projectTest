@@ -1,0 +1,12 @@
+{% extends 'manage/index_manage.html' %}
+{% block title %}
+Detail Subject
+{% endblock %}
+
+{% block content %}
+<form class="" action="{% url 'learn:create_task' %}" method="post">
+    {% csrf_token%}
+    {{form.as_p}}
+    <button type="submit" class="btn btn-danger btn-sm" >Create</button>
+</form>
+{% endblock %}

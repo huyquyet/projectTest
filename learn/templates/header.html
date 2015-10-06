@@ -1,0 +1,22 @@
+{% if user.is_authenticated %}
+Xin chao
+<div class="btn-group" role="group" aria-label="...">
+
+    <a type="button" class="btn btn-default" href="{% url 'learn:index' %}">
+        {{user.first_name}}{{user.last_name}}
+    </a>
+
+    <a href="{% url 'learn:singout'%}" class="btn btn-default" role="button">Thoat</a>
+
+    <div class="btn-group" style="float: right">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Setting<span
+                class="caret"></span></button>
+        <ul class="dropdown-menu" role="menu">
+            <li><a href="{% url 'learn:profile' user.pk %}">Thông tin ca nhân</a></li>
+            <li><a href="{% url 'learn:change_pass' %}">Đổi mật khẩu</a></li>
+        </ul>
+    </div>
+</div>
+{% else %}
+{% include 'account/singin.html' %}
+{% endif %}

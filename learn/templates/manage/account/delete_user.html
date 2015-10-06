@@ -1,0 +1,13 @@
+{% extends 'manage/index_manage.html' %}
+{% block title %}
+Trang quan ly tai khoan
+{% endblock %}
+
+{% block content %}
+<form action="{% url 'learn:delete_user' del_user.id %}" method="post">
+    {% csrf_token %}
+    <p>Are you sure you want to delete "{{del_user.username}}"?</p>
+    <input type="submit" value="Confirm" />
+    <a href="{% url 'learn:delete_user' del_user.id %}" style="text-decoration:none;" ><input type="button" value="Cancel"></a>
+</form>
+{% endblock %}
